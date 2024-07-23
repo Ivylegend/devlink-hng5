@@ -41,7 +41,7 @@ const Preview = () => {
           {Array(5)
             .fill(null)
             .map((_, index) => (
-              <div className="bg-[#EEEEEE] w-full h-11 rounded-lg"></div>
+              <div key={index} className="bg-[#EEEEEE] w-full h-11 rounded-lg"></div>
             ))}
         </div>
       </div>
