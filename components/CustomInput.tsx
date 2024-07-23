@@ -2,27 +2,28 @@ import React from "react";
 import { FormControl, FormField, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
-import { Control, FieldPath } from "react-hook-form";
+import { Control, FieldPath, FieldValues } from "react-hook-form";
 import { authFormSchema } from "@/lib/utils";
 import Image from "next/image";
 
+// Define your schema
 const formSchema = authFormSchema("sign-up");
 
-interface CustomInput {
-  control: Control<z.infer<typeof formSchema>>;
-  name: FieldPath<z.infer<typeof formSchema>>;
+interface CustomInputProps<TFieldValues extends FieldValues> {
+  control: Control<TFieldValues>;
+  name: FieldPath<TFieldValues>;
   label: string;
   placeholder: string;
   icon: string;
 }
 
-const CustomInput = ({
+const CustomInput = <TFieldValues extends FieldValues>({
   control,
   icon,
   name,
   label,
   placeholder,
-}: CustomInput) => {
+}: CustomInputProps<TFieldValues>) => {
   return (
     <FormField
       control={control}
@@ -37,7 +38,7 @@ const CustomInput = ({
                 <Input
                   placeholder={placeholder}
                   className="border-none p-0 bg-transparent outline-none focus-visible:ring-transparent"
-                  type={name === "password" ? "password" : "text"}
+                  type={name.includes("password") ? "password" : "text"}
                   {...field}
                 />
               </FormControl>
