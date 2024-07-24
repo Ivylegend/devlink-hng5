@@ -1,14 +1,32 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import MobileNav from "@/components/MobileNav";
 import Navbar from "@/components/Navbar";
 import Phone from "@/components/Phone";
 import { ProfileForm } from "@/components/ProfileForm";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
+import { useRouter } from "next/navigation";
 
 export default function Profile() {
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await getLoggedInUser();
+      if (!loggedInUser) {
+        router.push("/sign-in");
+      } else {
+        setUser(loggedInUser);
+      }
+    };
+
+    fetchUser();
+  }, [router]);
+
   const formRef = useRef<HTMLFormElement | null>(null);
   const [isFormValid, setFormValid] = useState(false);
 
