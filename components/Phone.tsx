@@ -63,6 +63,7 @@ const Phone: React.FC<PhoneProps> = ({ user }) => {
                     className="bg-[#EEEEEE] w-full h-11 rounded-lg"
                   ></div>
                 ))}
+              {/* div with <a> tag and the selected platform as the text */}
             </div>
           </div>
         </div>

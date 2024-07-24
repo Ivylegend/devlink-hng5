@@ -1,8 +1,28 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const Preview = () => {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await getLoggedInUser();
+      if (!loggedInUser) {
+        router.push("/sign-in");
+      } else {
+        setUser(loggedInUser);
+      }
+    };
+
+    fetchUser();
+  }, [router]);
+
   return (
     <section className="relative md:p-6 w-full">
       {/* BLUE BACKGROUND */}
@@ -32,8 +52,21 @@ const Preview = () => {
           <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full"></div>
 
           <div className="w-full flex flex-col items-center justify-center gap-3">
-            <div className="bg-[#EEEEEE] h-4 rounded-[104px] w-[160px]"></div>
-            <div className="bg-[#EEEEEE] h-2 w-[72px] rounded-[104px]"></div>
+            {/* USER NAME */}
+            {user && user.firstName && user.lastName ? (
+              <p className="text-darkgray font-bold text-[32px] text-center">{`${user.firstName} ${user.lastName}`}</p>
+            ) : (
+              <div className="bg-[#EEEEEE] h-4 rounded-[104px] w-[160px]"></div>
+            )}
+
+            {/* EMAIL */}
+            {user && user.email ? (
+              <p className="text-gray text-center font-normal text-base">
+                {user.email}
+              </p>
+            ) : (
+              <div className="bg-[#EEEEEE] h-2 w-[72px] rounded-[104px]"></div>
+            )}
           </div>
         </div>
 
@@ -41,7 +74,10 @@ const Preview = () => {
           {Array(5)
             .fill(null)
             .map((_, index) => (
-              <div key={index} className="bg-[#EEEEEE] w-full h-11 rounded-lg"></div>
+              <div
+                key={index}
+                className="bg-[#EEEEEE] w-full h-11 rounded-lg"
+              ></div>
             ))}
         </div>
       </div>
