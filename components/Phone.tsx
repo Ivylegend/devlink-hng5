@@ -76,7 +76,7 @@ const Phone: React.FC<PhoneProps> = ({ user }) => {
             <div className="w-full flex flex-col items-center justify-center gap-3">
               {/* USER NAME */}
               {displayName ? (
-                <p className="text-darkgray font-bold text-[32px] text-center">
+                <p className="text-darkgray font-bold whitespace-nowrap text-[32px] text-center">
                   {displayName}
                 </p>
               ) : (

@@ -134,7 +134,7 @@ const Preview = () => {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full h-11 text-white rounded-lg flex items-center justify-between px-4 py-3"
+                      className="w-full h-[56px] text-white rounded-lg flex items-center justify-between px-4 py-3"
                       style={{
                         backgroundColor: platformColors[link.platform],
                       }}

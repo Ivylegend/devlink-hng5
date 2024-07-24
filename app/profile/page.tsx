@@ -9,11 +9,15 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { getLoggedInUser, updateUserProfile } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 export default function Profile() {
+  const { toast } = useToast();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -32,20 +36,35 @@ export default function Profile() {
   const [isFormValid, setFormValid] = useState(false);
 
   const handleSubmit = async (values: any) => {
+    setIsLoading(true);
     if (user) {
       try {
-        console.log(`Submitting form for user ID: ${user.$id}`);
-        console.log("Form values: ", values);
+        toast({
+          description: `Submitting form for user ID: ${user.$id}`,
+          className: "bg-darkgray text-white h-[56px] rounded-[12px]",
+        });
 
         const updatedUser = await updateUserProfile(user.$id, values);
 
         if (updatedUser) {
-          console.log("Profile updated successfully");
+          toast({
+            description: "Your changes have been successfully saved!",
+            className: "bg-darkgray text-white h-[56px] rounded-[12px]",
+          });
         } else {
-          console.error("Profile update failed");
+          toast({
+            description: "Profile update failed",
+            variant: "destructive",
+          });
         }
       } catch (error) {
         console.error("Error updating profile", error);
+        toast({
+          description: "Error updating profile",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -160,9 +179,16 @@ export default function Profile() {
               <Button
                 className="text-white w-full md:w-24 rounded-lg bg-purple hover:bg-lightpurple hover:text-purple py-[11px] px-[27px] h-12"
                 onClick={triggerSubmit}
-                disabled={!isFormValid}
+                disabled={!isFormValid || isLoading}
               >
-                Save
+                {isLoading ? (
+                  <>
+                    <Loader2 size={20} className="animate-spin" /> &nbsp;
+                    Loading...
+                  </>
+                ) : (
+                  "Save"
+                )}
               </Button>
             </div>
           </div>

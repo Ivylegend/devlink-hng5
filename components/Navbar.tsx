@@ -1,12 +1,13 @@
 "use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { Button } from "./ui/button";
 
 const Navbar = () => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div className="bg-white hidden p-4 pl-6 md:flex items-center justify-between">
@@ -14,22 +15,48 @@ const Navbar = () => {
       <div className="flex">
         <Link
           href="/"
-          className="rounded-lg py-[11px] px-[27px] gap-2 font-semibold hover:text-purple text-purple bg-lightpurple cursor-pointer flex items-center justify-center h-11"
+          className={`rounded-lg py-[11px] px-[27px] h-[46px] gap-2 text-gray font-semibold cursor-pointer flex items-center justify-center ${
+            pathname === "/"
+              ? "bg-lightpurple text-purple"
+              : "hover:text-purple"
+          }`}
         >
-          <Image src="/icons/link.svg" alt="logo" width={20} height={20} />
+          {pathname === "/" ? (
+            <Image
+              src="/icons/purple-link.svg"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+          ) : (
+            <Image src="/icons/link.svg" alt="logo" width={20} height={20} />
+          )}
           Links
         </Link>
 
         <Link
           href="/profile"
-          className="rounded-lg py-[11px] px-[27px] gap-2 font-semibold hover:text-purple cursor-pointer flex items-center justify-center h-11"
+          className={`rounded-lg py-[11px] px-[27px] h-[46px] gap-2 text-gray font-semibold cursor-pointer flex items-center justify-center ${
+            pathname === "/profile"
+              ? "bg-lightpurple text-purple"
+              : "hover:text-purple"
+          }`}
         >
-          <Image
-            src="/icons/user-circle.svg"
-            alt="logo"
-            width={20}
-            height={20}
-          />
+          {pathname === "/profile" ? (
+            <Image
+              src="/icons/purple-profile.svg"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+          ) : (
+            <Image
+              src="/icons/user-circle.svg"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+          )}
           Profile Details
         </Link>
       </div>
@@ -37,7 +64,9 @@ const Navbar = () => {
       <Link href="/preview">
         <Button
           variant={"outline"}
-          className="border border-purple text-purple font-semibold hover:bg-lightpurple hover:text-purple py-[11px] h-[46px] px-[27px]"
+          className={`border border-purple text-purple font-semibold hover:bg-lightpurple hover:text-purple py-[11px] h-[46px] px-[27px] ${
+            pathname === "/preview" ? "bg-purple text-white" : ""
+          }`}
         >
           Preview
         </Button>

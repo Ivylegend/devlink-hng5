@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const MobileNav = () => {
-  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div className="bg-white p-4 pl-6 flex md:hidden items-center justify-between">
@@ -13,21 +13,47 @@ const MobileNav = () => {
       <div className="flex">
         <Link
           href="/"
-          className="w-[74px] rounded-lg bg-lightpurple cursor-pointer flex items-center justify-center h-11"
+          className={`rounded-lg py-[11px] w-[74px] px-[27px] h-[46px] gap-2 text-gray font-semibold cursor-pointer flex items-center justify-center ${
+            pathname === "/"
+              ? "bg-lightpurple text-purple"
+              : "hover:text-purple"
+          }`}
         >
-          <Image src="/icons/link.svg" alt="logo" width={20} height={20} />
+          {pathname === "/" ? (
+            <Image
+              src="/icons/purple-link.svg"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+          ) : (
+            <Image src="/icons/link.svg" alt="logo" width={20} height={20} />
+          )}
         </Link>
 
         <Link
           href="/profile"
-          className="w-[74px] rounded-lg cursor-pointer flex items-center justify-center h-11"
+          className={`rounded-lg py-[11px] px-[27px] h-[46px] w-[74px] gap-2 text-gray font-semibold cursor-pointer flex items-center justify-center ${
+            pathname === "/profile"
+              ? "bg-lightpurple text-purple"
+              : "hover:text-purple"
+          }`}
         >
-          <Image
-            src="/icons/user-circle.svg"
-            alt="logo"
-            width={20}
-            height={20}
-          />
+          {pathname === "/profile" ? (
+            <Image
+              src="/icons/purple-profile.svg"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+          ) : (
+            <Image
+              src="/icons/user-circle.svg"
+              alt="logo"
+              width={20}
+              height={20}
+            />
+          )}
         </Link>
       </div>
       <Link href="/preview">
