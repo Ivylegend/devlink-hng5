@@ -89,7 +89,7 @@ export default function Home() {
           <div className="bg-white w-full py-6 md:py-10 rounded-[12px] flex flex-col gap-10">
             <div className="flex flex-col gap-2 px-6 md:px-10">
               <h2 className="text-darkgray font-bold text-2xl md:text-[32px]">
-                Customize your links {user}
+                Customize your links
               </h2>
               <p className="text-gray font-normal">
                 Add/edit/remove links below and then share all your profiles
