@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -31,16 +30,22 @@ interface ProfileFormProps {
   onSubmit: SubmitHandler<z.infer<typeof formSchema>>;
   formRef: React.RefObject<HTMLFormElement>;
   setFormValid: (isValid: boolean) => void;
+  initialValues?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
 }
 
 export function ProfileForm({
   onSubmit,
   formRef,
   setFormValid,
+  initialValues,
 }: ProfileFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialValues || {
       firstName: "",
       lastName: "",
       email: "",
@@ -69,7 +74,9 @@ export function ProfileForm({
           name="firstName"
           render={({ field }) => (
             <FormItem className="flex flex-col md:flex-row w-full md:justify-between md:items-center">
-              <FormLabel className="text-xs text-gray md:text-base">First Name *</FormLabel>
+              <FormLabel className="text-xs text-gray md:text-base">
+                First Name *
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder="John"
@@ -86,7 +93,9 @@ export function ProfileForm({
           name="lastName"
           render={({ field }) => (
             <FormItem className="flex flex-col md:flex-row w-full md:justify-between md:items-center">
-              <FormLabel className="text-xs text-gray md:text-base">Last Name *</FormLabel>
+              <FormLabel className="text-xs text-gray md:text-base">
+                Last Name *
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder="Wright"
@@ -103,7 +112,9 @@ export function ProfileForm({
           name="email"
           render={({ field }) => (
             <FormItem className="flex flex-col md:flex-row w-full md:justify-between md:items-center">
-              <FormLabel className="text-xs text-gray md:text-base">Email</FormLabel>
+              <FormLabel className="text-xs text-gray md:text-base">
+                Email
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder="ben@example.com"

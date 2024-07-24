@@ -39,7 +39,7 @@ const formSchema = z.object({
 
 export default function Home() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -79,9 +79,9 @@ export default function Home() {
       </div>
       <div className="xl:flex gap-6 w-full">
         {/* DESKTOP ONLY */}
-        <div className="hidden xl:flex w-[560px] bg-white rounded-[12px] items-center justify-center">
+        <div className="hidden xl:flex xl:min-h-[744px] xl:max-h-[750px] w-[560px] bg-white rounded-[12px] items-center justify-center">
           {/* PHONE DIAGRAM */}
-          <Phone />
+          <Phone user={user} />
         </div>
 
         {/* DESKTOP AND MOBILE */}
@@ -168,7 +168,7 @@ export default function Home() {
                                   onValueChange={field.onChange}
                                   value={field.value}
                                 >
-                                  <SelectTrigger className="w-full md:w-[344px] rounded-lg py-3 px-4 h-12">
+                                  <SelectTrigger className="w-full rounded-lg py-3 px-4 h-12">
                                     <SelectValue placeholder="Select a platform" />
                                   </SelectTrigger>
                                   <SelectContent>

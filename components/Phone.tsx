@@ -1,10 +1,24 @@
 import Image from "next/image";
 import React from "react";
 
-const Phone = () => {
+interface PhoneProps {
+  user: {
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+  } | null;
+}
+
+const Phone: React.FC<PhoneProps> = ({ user }) => {
+  const displayName =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : null;
+  const displayEmail = user?.email || null;
+
   return (
-    <div className="border border-gray w-[307px] h-[640px] rounded-[56px] relative">
-      <div className="w-[285px] h-full flex items-start justify-center p-5 mx-auto">
+    <div className="border border-gray w-[307px] h-[640px] rounded-[56px] relative overflow-y-hidden">
+      <div className="w-[285px] h-[600px] flex items-start justify-center p-5 mx-auto">
         <Image
           src="/icons/phone-line.svg"
           width={285}
@@ -19,17 +33,37 @@ const Phone = () => {
             <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full"></div>
 
             <div className="w-full flex flex-col items-center justify-center gap-3">
-              <div className="bg-[#EEEEEE] h-4 rounded-[104px] w-[160px]"></div>
-              <div className="bg-[#EEEEEE] h-2 w-[72px] rounded-[104px]"></div>
+              {/* USER NAME */}
+              {displayName ? (
+                <p className="text-darkgray font-bold text-[32px] text-center">
+                  {displayName}
+                </p>
+              ) : (
+                <div className="bg-[#EEEEEE] h-4 rounded-[104px] w-[160px]"></div>
+              )}
+
+              {/* USER EMAIL */}
+              {displayEmail ? (
+                <p className="text-gray text-center font-normal text-base">
+                  {displayEmail}
+                </p>
+              ) : (
+                <div className="bg-[#EEEEEE] h-2 w-[72px] rounded-[104px]"></div>
+              )}
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-5">
-            {Array(5)
-              .fill(null)
-              .map((_, index) => (
-                <div key={index} className="bg-[#EEEEEE] w-full h-11 rounded-lg"></div>
-              ))}
+          <div className="w-full h-[240px] overflow-y-scroll">
+            <div className="w-full flex flex-col gap-5">
+              {Array(5)
+                .fill(null)
+                .map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#EEEEEE] w-full h-11 rounded-lg"
+                  ></div>
+                ))}
+            </div>
           </div>
         </div>
       </div>

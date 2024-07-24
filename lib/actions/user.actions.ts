@@ -6,10 +6,12 @@ import { cookies } from "next/headers";
 import { extractCustomerIdFromUrl, parseStringify } from "../utils";
 
 import { revalidatePath } from "next/cache";
+import { InputFile } from "node-appwrite/file";
 
 const {
   APPWRITE_DATABASE_ID: DATABASE_ID,
   APPWRITE_USER_COLLECTION_ID: USER_COLLECTION_ID,
+  NEXT_PUBLIC_APPWRITE_BUCKET_ID: BUCKET_ID,
 } = process.env;
 
 export const getUserInfo = async ({ userId }: getUserInfoProps) => {
@@ -54,7 +56,7 @@ export const signUp = async ({ password, email }: SignUpParams) => {
   try {
     const { account, database } = await createAdminClient();
 
-    newUserAccount = await account.create(ID.unique(), email, password,);
+    newUserAccount = await account.create(ID.unique(), email, password);
 
     if (!newUserAccount) throw new Error("Error creating user");
 
@@ -64,6 +66,7 @@ export const signUp = async ({ password, email }: SignUpParams) => {
       ID.unique(),
       {
         userId: newUserAccount.$id,
+        email,
       }
     );
 
@@ -82,19 +85,19 @@ export const signUp = async ({ password, email }: SignUpParams) => {
   }
 };
 
-export async function getLoggedInUser() {
+export const getLoggedInUser = async (): Promise<User | null> => {
   try {
     const { account } = await createSessionClient();
     const result = await account.get();
 
     const user = await getUserInfo({ userId: result.$id });
 
-    return parseStringify(user);
+    return user ? (user as User) : null; // Ensure the returned value is of type User
   } catch (error) {
     console.log(error);
     return null;
   }
-}
+};
 
 export const logoutAccount = async () => {
   try {
@@ -104,6 +107,26 @@ export const logoutAccount = async () => {
 
     await account.deleteSession("current");
   } catch (error) {
+    return null;
+  }
+};
+
+export const updateUserProfile = async ($id: string, profileData: any) => {
+  try {
+    const { database } = await createAdminClient();
+    
+    console.log(`Updating profile for user ID: ${$id}`);
+    
+    const user = await database.updateDocument(
+      DATABASE_ID!,
+      USER_COLLECTION_ID!,
+      $id,
+      profileData
+    );
+
+    return parseStringify(user);
+  } catch (error) {
+    console.error("Error updating user profile", error);
     return null;
   }
 };
