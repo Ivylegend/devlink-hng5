@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MobileNav from "@/components/MobileNav";
 import Navbar from "@/components/Navbar";
 import Phone from "@/components/Phone";
@@ -25,6 +25,8 @@ import {
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 
 const formSchema = z.object({
   links: z.array(
@@ -36,6 +38,22 @@ const formSchema = z.object({
 });
 
 export default function Home() {
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const loggedInUser = await getLoggedInUser();
+      if (!loggedInUser) {
+        router.push("/sign-in");
+      } else {
+        setUser(loggedInUser);
+      }
+    };
+
+    fetchUser();
+  }, [router]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,7 +89,7 @@ export default function Home() {
           <div className="bg-white w-full py-6 md:py-10 rounded-[12px] flex flex-col gap-10">
             <div className="flex flex-col gap-2 px-6 md:px-10">
               <h2 className="text-darkgray font-bold text-2xl md:text-[32px]">
-                Customize your links
+                Customize your links {user}
               </h2>
               <p className="text-gray font-normal">
                 Add/edit/remove links below and then share all your profiles
