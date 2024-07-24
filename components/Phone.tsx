@@ -1,11 +1,25 @@
 import Image from "next/image";
 import React from "react";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaYoutube,
+  FaFacebook,
+  FaInstagram,
+} from "react-icons/fa";
 
 interface PhoneProps {
   user: {
     firstName: string | null;
     lastName: string | null;
     email: string | null;
+    github?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+    youtube?: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
   } | null;
 }
 
@@ -15,6 +29,33 @@ const Phone: React.FC<PhoneProps> = ({ user }) => {
       ? `${user.firstName} ${user.lastName}`
       : null;
   const displayEmail = user?.email || null;
+
+  const links = [
+    { platform: "GitHub", url: user?.github, icon: <FaGithub /> },
+    { platform: "LinkedIn", url: user?.linkedin, icon: <FaLinkedin /> },
+    { platform: "Twitter", url: user?.twitter, icon: <FaTwitter /> },
+    { platform: "YouTube", url: user?.youtube, icon: <FaYoutube /> },
+    { platform: "Facebook", url: user?.facebook, icon: <FaFacebook /> },
+    { platform: "Instagram", url: user?.instagram, icon: <FaInstagram /> },
+  ];
+
+  const defaultLinks = [
+    "GitHub",
+    "LinkedIn",
+    "Twitter",
+    "YouTube",
+    "Facebook",
+    "Instagram",
+  ];
+
+  const platformColors: { [key: string]: string } = {
+    GitHub: "#181717",
+    LinkedIn: "#0A66C2",
+    Twitter: "#1DA1F2",
+    YouTube: "#EE3939",
+    Facebook: "#1877F2",
+    Instagram: "#E1306C",
+  };
 
   return (
     <div className="border border-gray w-[307px] h-[640px] rounded-[56px] relative overflow-y-hidden">
@@ -55,15 +96,40 @@ const Phone: React.FC<PhoneProps> = ({ user }) => {
 
           <div className="w-full h-[240px] overflow-y-scroll">
             <div className="w-full flex flex-col gap-5">
-              {Array(5)
-                .fill(null)
-                .map((_, index) => (
-                  <div
-                    key={index}
-                    className="bg-[#EEEEEE] w-full h-11 rounded-lg"
-                  ></div>
-                ))}
-              {/* div with <a> tag and the selected platform as the text */}
+              {links.every((link) => !link.url)
+                ? defaultLinks.map((platform, index) => (
+                    <div
+                      key={index}
+                      className="bg-[#EEEEEE] w-full h-11 rounded-lg flex items-center justify-center"
+                    ></div>
+                  ))
+                : links.map(
+                    (link, index) =>
+                      link.url && (
+                        <a
+                          key={index}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full h-11 text-white rounded-lg flex items-center justify-between px-4 py-3"
+                          style={{
+                            backgroundColor: platformColors[link.platform],
+                          }}
+                        >
+                          <span className="flex items-center gap-2">
+                            {link.icon}
+                            <p className="font-xs">{link.platform}</p>
+                          </span>
+                          <Image
+                            src="/icons/arrow-right.svg"
+                            alt="arrow right"
+                            width={16}
+                            height={16}
+                            loading="eager"
+                          />
+                        </a>
+                      )
+                  )}
             </div>
           </div>
         </div>

@@ -26,7 +26,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { getLoggedInUser } from "@/lib/actions/user.actions";
+import { getLoggedInUser, addLinksToUser } from "@/lib/actions/user.actions"; // Import the function
 
 const formSchema = z.object({
   links: z.array(
@@ -68,7 +68,13 @@ export default function Home() {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    if (!user) return; // Ensure user is available
+    try {
+      await addLinksToUser(user.$id, data.links);
+      console.log("Links updated successfully");
+    } catch (error) {
+      console.error("Error updating links:", error);
+    }
   };
 
   return (

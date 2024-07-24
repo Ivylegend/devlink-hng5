@@ -4,7 +4,37 @@ import { Button } from "@/components/ui/button";
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaYoutube,
+  FaFacebook,
+  FaInstagram,
+} from "react-icons/fa";
+
+const platformColors: { [key: string]: string } = {
+  GitHub: "#181717",
+  LinkedIn: "#0A66C2",
+  Twitter: "#1DA1F2",
+  YouTube: "#FF0000",
+  Facebook: "#1877F2",
+  Instagram: "#E1306C",
+};
+
+interface User {
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  github?: string | null;
+  linkedin?: string | null;
+  twitter?: string | null;
+  youtube?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+}
 
 const Preview = () => {
   const router = useRouter();
@@ -22,6 +52,24 @@ const Preview = () => {
 
     fetchUser();
   }, [router]);
+
+  const links = [
+    { platform: "GitHub", url: user?.github, icon: <FaGithub /> },
+    { platform: "LinkedIn", url: user?.linkedin, icon: <FaLinkedin /> },
+    { platform: "Twitter", url: user?.twitter, icon: <FaTwitter /> },
+    { platform: "YouTube", url: user?.youtube, icon: <FaYoutube /> },
+    { platform: "Facebook", url: user?.facebook, icon: <FaFacebook /> },
+    { platform: "Instagram", url: user?.instagram, icon: <FaInstagram /> },
+  ];
+
+  const defaultLinks = [
+    "GitHub",
+    "LinkedIn",
+    "Twitter",
+    "YouTube",
+    "Facebook",
+    "Instagram",
+  ];
 
   return (
     <section className="relative md:p-6 w-full">
@@ -48,7 +96,7 @@ const Preview = () => {
       {/* USER CARD */}
       <div className="max-w-[348px] rounded-[24px] py-12 px-14 mx-auto md:my-32 md:shadow-lg flex items-start flex-col justify-center gap-[56px] z-20 bg-white">
         <div className="flex flex-col gap-[25px] w-full items-center justify-center">
-          {/* PROFILE CIRCLE*/}
+          {/* PROFILE CIRCLE */}
           <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full"></div>
 
           <div className="w-full flex flex-col items-center justify-center gap-3">
@@ -71,14 +119,40 @@ const Preview = () => {
         </div>
 
         <div className="w-full flex flex-col gap-5">
-          {Array(5)
-            .fill(null)
-            .map((_, index) => (
-              <div
-                key={index}
-                className="bg-[#EEEEEE] w-full h-11 rounded-lg"
-              ></div>
-            ))}
+          {links.every((link) => !link.url)
+            ? defaultLinks.map((platform, index) => (
+                <div
+                  key={index}
+                  className="bg-[#EEEEEE] w-full h-11 rounded-lg flex items-center justify-center"
+                ></div>
+              ))
+            : links.map(
+                (link, index) =>
+                  link.url && (
+                    <a
+                      key={index}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full h-11 text-white rounded-lg flex items-center justify-between px-4 py-3"
+                      style={{
+                        backgroundColor: platformColors[link.platform],
+                      }}
+                    >
+                      <span className="flex items-center gap-2">
+                        {link.icon}
+                        <p className="font-xs">{link.platform}</p>
+                      </span>
+                      <Image
+                        src="/icons/arrow-right.svg"
+                        alt="arrow right"
+                        width={16}
+                        height={16}
+                        loading="eager"
+                      />
+                    </a>
+                  )
+              )}
         </div>
       </div>
     </section>

@@ -114,9 +114,9 @@ export const logoutAccount = async () => {
 export const updateUserProfile = async ($id: string, profileData: any) => {
   try {
     const { database } = await createAdminClient();
-    
+
     console.log(`Updating profile for user ID: ${$id}`);
-    
+
     const user = await database.updateDocument(
       DATABASE_ID!,
       USER_COLLECTION_ID!,
@@ -128,5 +128,32 @@ export const updateUserProfile = async ($id: string, profileData: any) => {
   } catch (error) {
     console.error("Error updating user profile", error);
     return null;
+  }
+};
+
+export const addLinksToUser = async (
+  $id: string,
+  links: { platform: string; link: string }[]
+) => {
+  try {
+    const { database } = await createAdminClient();
+
+    // Prepare the data to update
+    const data: { [key: string]: string } = {};
+    links.forEach(({ platform, link }) => {
+      data[platform] = link;
+    });
+
+    console.log(`Uploading links for user ID: ${$id}`);
+    const user = await database.updateDocument(
+      DATABASE_ID!,
+      USER_COLLECTION_ID!,
+      $id,
+      data
+    );
+    return user; // No need for parseStringify if not needed
+  } catch (error) {
+    console.error("Error updating user links:", error);
+    throw error;
   }
 };
