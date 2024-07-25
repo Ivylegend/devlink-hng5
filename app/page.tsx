@@ -22,6 +22,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaYoutube,
+  FaFacebook,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -178,26 +187,70 @@ export default function Home() {
                                   value={field.value}
                                 >
                                   <SelectTrigger className="w-full rounded-lg py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0">
-                                    <SelectValue placeholder="Select a platform" />
+                                    <SelectValue
+                                      placeholder="Select a platform"
+                                      className="text-darkgray text-lg"
+                                    />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="github">
-                                      GitHub
+                                    <SelectItem
+                                      value="github"
+                                      className="text-darkgray text-base border-b py-4"
+                                    >
+                                      <div className="flex gap-3 items-center">
+                                        <FaGithub className="text-xl" />
+                                        <p>GitHub</p>
+                                      </div>
                                     </SelectItem>
-                                    <SelectItem value="linkedin">
-                                      LinkedIn
+
+                                    <SelectItem
+                                      value="linkedin"
+                                      className="text-darkgray text-base border-b py-4"
+                                    >
+                                      <div className="flex gap-3 items-center">
+                                        <FaLinkedinIn className="text-xl" />
+                                        <p>LinkedIn</p>
+                                      </div>
                                     </SelectItem>
-                                    <SelectItem value="twitter">
-                                      Twitter
+
+                                    <SelectItem
+                                      value="twitter"
+                                      className="text-darkgray text-base border-b py-4"
+                                    >
+                                      <div className="flex gap-3 items-center">
+                                        <FaTwitter className="text-xl" />
+                                        <p>Twitter</p>
+                                      </div>
                                     </SelectItem>
-                                    <SelectItem value="youtube">
-                                      YouTube
+
+                                    <SelectItem
+                                      value="youtube"
+                                      className="text-darkgray text-base border-b py-4"
+                                    >
+                                      <div className="flex gap-3 items-center">
+                                        <FaYoutube className="text-xl" />
+                                        <p>YouTube</p>
+                                      </div>
                                     </SelectItem>
-                                    <SelectItem value="facebook">
-                                      Facebook
+
+                                    <SelectItem
+                                      value="facebook"
+                                      className="text-darkgray text-base border-b py-4"
+                                    >
+                                      <div className="flex gap-3 items-center">
+                                        <FaFacebook className="text-xl" />
+                                        <p>Facebook</p>
+                                      </div>
                                     </SelectItem>
-                                    <SelectItem value="instagram">
-                                      Instagram
+
+                                    <SelectItem
+                                      value="instagram"
+                                      className="text-darkgray text-base py-4"
+                                    >
+                                      <div className="flex gap-3 items-center">
+                                        <FaInstagram className="text-xl" />
+                                        <p>Instagram</p>
+                                      </div>
                                     </SelectItem>
                                   </SelectContent>
                                 </Select>
@@ -216,14 +269,23 @@ export default function Home() {
                               <FormLabel className="text-xs text-gray md:text-base">
                                 Link
                               </FormLabel>
-                              <FormControl>
-                                <Input
-                                  placeholder="e.g. https://www.github.com/johnappleseed"
-                                  {...field}
-                                  className="w-full rounded-lg py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0"
+                              <div className="relative">
+                                <Image
+                                  src="/icons/link.svg"
+                                  width={20}
+                                  height={20}
+                                  alt="link icon"
+                                  className="absolute left-4 top-4"
                                 />
-                              </FormControl>
-                              <FormMessage />
+                                <FormControl>
+                                  <Input
+                                    placeholder="e.g. https://www.github.com/johnappleseed"
+                                    {...field}
+                                    className="w-full rounded-lg py-3 px-4 pl-12 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0"
+                                  />
+                                </FormControl>
+                                <FormMessage className="absolute right-4 top-4 text-xs" />
+                              </div>
                             </FormItem>
                           )}
                         />

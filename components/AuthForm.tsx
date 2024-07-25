@@ -72,14 +72,14 @@ const AuthForm = ({ type }: { type: string }) => {
         />
       </Link>
       <div className="flex flex-col gap-10 md:bg-white md:min-w-[476px] md:rounded-[12px] md:p-10">
-        <header className="flex flex-col gap-2 md:gap-8">
-          <h1 className="text-2xl md:text-[32px] lg:text-36 font-bold text-darkgray">
-            {type === "sign-in" ? "Login" : "Create Account"}
+        <header className="flex flex-col gap-2">
+          <h1 className="text-2xl md:text-[32px] leading-[36px] md:leading-[48px] font-bold text-darkgray">
+            {type === "sign-in" ? "Login" : "Create account"}
           </h1>
           <p className="font-normal text-gray">
             {type === "sign-in"
               ? "Add your details below to get back into the app"
-              : "Let’s get you started sharing your links!"}
+              : "Let's get you started sharing your links!"}
           </p>
         </header>
 

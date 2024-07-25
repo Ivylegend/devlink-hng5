@@ -67,28 +67,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-@layer utilities {
-  /* Auth Form */
-  
-
-  /* .form-item {
-    @apply flex flex-col gap-1.5;
-  }
-
-  .form-label {
-    @apply w-full max-w-[280px] font-medium text-gray-700;
-  }
-
-  .form-message {
-    @apply text-red-500;
-  }
-
-  .form-btn {
-    @apply rounded-lg border font-semibold text-white;
-  }
-
-  .form-link {
-    @apply cursor-pointer font-medium;
-  } */
-}

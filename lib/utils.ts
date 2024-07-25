@@ -29,13 +29,13 @@ export function decryptId(id: string) {
 export const authFormSchema = (type: string) =>
   z
     .object({
-      email: z.string().email(),
+      email: z.string().email().min(2, "Can't be empty"),
       password: z.string().min(8, {
-        message: "Password must be at least 8 characters.",
+        message: "Please check again",
       }),
       ...(type === "sign-up" && {
         confirmPassword: z.string().min(8, {
-          message: "Password must be at least 8 characters.",
+          message: "Please check again",
         }),
       }),
     })

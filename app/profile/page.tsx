@@ -41,7 +41,7 @@ export default function Profile() {
     if (user) {
       try {
         toast({
-          description: `Submitting form for user ID: ${user.$id}`,
+          description: `Updating user profile: ${user.$id}`,
           className: "bg-darkgray text-white h-[56px] rounded-[12px]",
         });
 
@@ -52,6 +52,8 @@ export default function Profile() {
             description: "Your changes have been successfully saved!",
             className: "bg-darkgray text-white h-[56px] rounded-[12px]",
           });
+
+          window.location.reload();
         } else {
           toast({
             description: "Profile update failed",
