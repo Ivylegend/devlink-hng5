@@ -32,7 +32,7 @@ const CustomInput = <TFieldValues extends FieldValues>({
         <div className="flex flex-col gap-1">
           <FormLabel className="text-xs text-darkgray">{label}</FormLabel>
           <div className="flex w-full flex-col">
-            <div className="flex items-center border border-border rounded-[8px] gap-3 py-3 px-4 h-12">
+            <div className="flex items-center border border-border rounded-[8px] gap-3 py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0">
               <Image src={icon} width={20} height={20} alt="icon" />
               <FormControl>
                 <Input

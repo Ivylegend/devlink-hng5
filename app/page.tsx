@@ -174,7 +174,7 @@ export default function Home() {
                                   onValueChange={field.onChange}
                                   value={field.value}
                                 >
-                                  <SelectTrigger className="w-full rounded-lg py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl">
+                                  <SelectTrigger className="w-full rounded-lg py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0">
                                     <SelectValue placeholder="Select a platform" />
                                   </SelectTrigger>
                                   <SelectContent>
@@ -217,7 +217,7 @@ export default function Home() {
                                 <Input
                                   placeholder="e.g. https://www.github.com/johnappleseed"
                                   {...field}
-                                  className="w-full rounded-lg py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl"
+                                  className="w-full rounded-lg py-3 px-4 h-12 ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0"
                                 />
                               </FormControl>
                               <FormMessage />

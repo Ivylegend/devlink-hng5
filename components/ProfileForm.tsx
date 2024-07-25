@@ -18,10 +18,10 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
-    message: "Firstname must be at least 2 characters.",
+    message: "Can't be empty",
   }),
   lastName: z.string().min(2, {
-    message: "Lastname must be at least 2 characters.",
+    message: "Can't be empty",
   }),
   email: z.string().email(),
 });
@@ -77,14 +77,16 @@ export function ProfileForm({
               <FormLabel className="text-xs text-gray md:text-base">
                 First Name *
               </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="John"
-                  {...field}
-                  className="w-full rounded-lg py-3 px-4 h-12 md:w-[344px]"
-                />
-              </FormControl>
-              <FormMessage />
+              <div className="relative">
+                <FormControl>
+                  <Input
+                    placeholder="John"
+                    {...field}
+                    className="w-full rounded-lg py-3 px-4 h-12 md:w-[344px] ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0"
+                  />
+                </FormControl>
+                <FormMessage className="absolute right-4 top-4" />
+              </div>
             </FormItem>
           )}
         />
@@ -96,14 +98,16 @@ export function ProfileForm({
               <FormLabel className="text-xs text-gray md:text-base">
                 Last Name *
               </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Wright"
-                  {...field}
-                  className="w-full rounded-lg py-3 px-4 h-12 md:w-[344px]"
-                />
-              </FormControl>
-              <FormMessage />
+              <div className="relative">
+                <FormControl>
+                  <Input
+                    placeholder="Wright"
+                    {...field}
+                    className="w-full rounded-lg py-3 px-4 h-12 md:w-[344px] ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0"
+                  />
+                </FormControl>
+                <FormMessage className="absolute right-4 top-4" />
+              </div>
             </FormItem>
           )}
         />
@@ -115,14 +119,16 @@ export function ProfileForm({
               <FormLabel className="text-xs text-gray md:text-base">
                 Email
               </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="ben@example.com"
-                  {...field}
-                  className="w-full rounded-lg py-3 px-4 h-12 md:w-[344px]"
-                />
-              </FormControl>
-              <FormMessage />
+              <div className="relative">
+                <FormControl>
+                  <Input
+                    placeholder="ben@example.com"
+                    {...field}
+                    className="w-full rounded-lg py-3 px-4 h-12 md:w-[344px] ring-transparent focus:ring-purple focus-visible:ring-purple focus-visible:shadow-xl focus:shadow-xl bg-white ring-offset-0"
+                  />
+                </FormControl>
+                <FormMessage className="absolute right-4 top-4" />
+              </div>
             </FormItem>
           )}
         />
