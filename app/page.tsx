@@ -27,19 +27,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { getLoggedInUser, addLinksToUser } from "@/lib/actions/user.actions"; // Import the function
-
-const formSchema = z.object({
-  links: z.array(
-    z.object({
-      platform: z.string().min(2, { message: "This field cannot be empty" }),
-      link: z.string().min(2, { message: "This field cannot be empty" }),
-    })
-  ),
-});
+import { formSchema } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Home() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -69,11 +64,19 @@ export default function Home() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!user) return; // Ensure user is available
+    setIsLoading(true); // Start loading
     try {
       await addLinksToUser(user.$id, data.links);
-      console.log("Links updated successfully");
+      toast({
+        description: "Links updated successfully",
+        className: "bg-darkgray text-white h-[56px] rounded-[12px]",
+      });
+      // Force a page reload
+      window.location.reload();
     } catch (error) {
       console.error("Error updating links:", error);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -231,9 +234,16 @@ export default function Home() {
                       <Button
                         type="submit"
                         className="text-white w-full md:w-24 rounded-lg bg-purple hover:bg-lightpurple hover:text-purple py-[11px] px-[27px] h-12"
-                        disabled={!form.formState.isValid}
+                        disabled={!form.formState.isValid || isLoading}
                       >
-                        Save
+                        {isLoading ? (
+                          <>
+                            <Loader2 size={20} className="animate-spin" />
+                            &nbsp; Loading...
+                          </>
+                        ) : (
+                          "Save"
+                        )}
                       </Button>
                     </div>
                   </form>

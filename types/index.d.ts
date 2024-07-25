@@ -18,12 +18,18 @@ declare type LoginUser = {
 };
 
 declare type User = {
-  $id: string;
-  email: string;
   userId: string;
-  firstName: string;
-  lastName: string;
   profilePicture?: string;
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  github?: string | null;
+  linkedin?: string | null;
+  twitter?: string | null;
+  youtube?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  $id: string;
 };
 
 declare type NewUserParams = {
@@ -72,4 +78,19 @@ declare interface signInProps {
 
 declare interface getUserInfoProps {
   userId: string;
+}
+
+declare interface PhoneProps {
+  user: {
+    $id: string;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+    github?: string | null;
+    linkedin?: string | null;
+    twitter?: string | null;
+    youtube?: string | null;
+    facebook?: string | null;
+    instagram?: string | null;
+  } | null;
 }

@@ -3,7 +3,7 @@
 import { ID, Query } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { cookies } from "next/headers";
-import { extractCustomerIdFromUrl, parseStringify } from "../utils";
+import { parseStringify } from "../utils";
 
 import { revalidatePath } from "next/cache";
 import { InputFile } from "node-appwrite/file";

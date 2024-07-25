@@ -14,43 +14,46 @@ import {
   FaFacebook,
   FaInstagram,
 } from "react-icons/fa";
-
-const platformColors: { [key: string]: string } = {
-  GitHub: "#181717",
-  LinkedIn: "#0A66C2",
-  Twitter: "#1DA1F2",
-  YouTube: "#FF0000",
-  Facebook: "#1877F2",
-  Instagram: "#E1306C",
-};
-
-interface User {
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  github?: string | null;
-  linkedin?: string | null;
-  twitter?: string | null;
-  youtube?: string | null;
-  facebook?: string | null;
-  instagram?: string | null;
-}
+import { Client, Storage } from "node-appwrite";
+import { defaultLinks, platformColors } from "@/lib/utils";
 
 const Preview = () => {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const loggedInUser = await getLoggedInUser();
-      if (!loggedInUser) {
-        router.push("/sign-in");
-      } else {
-        setUser(loggedInUser);
+    const fetchData = async () => {
+      try {
+        const loggedInUser = await getLoggedInUser();
+        if (!loggedInUser) {
+          router.push("/sign-in");
+        } else {
+          setUser(loggedInUser);
+
+          // Fetch the profile image only after user data is fetched
+          const client = new Client()
+            .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+            .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+          const storage = new Storage(client);
+
+          const response = await storage.getFileDownload(
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!,
+            loggedInUser.$id
+          );
+
+          // Convert the response (ArrayBuffer) to a Blob
+          const blob = new Blob([response], { type: "image/jpeg" });
+          const url = URL.createObjectURL(blob);
+          setProfileImageUrl(url);
+        }
+      } catch (error) {
+        console.error("Error fetching data", error);
       }
     };
 
-    fetchUser();
+    fetchData();
   }, [router]);
 
   const links = [
@@ -60,15 +63,6 @@ const Preview = () => {
     { platform: "YouTube", url: user?.youtube, icon: <FaYoutube /> },
     { platform: "Facebook", url: user?.facebook, icon: <FaFacebook /> },
     { platform: "Instagram", url: user?.instagram, icon: <FaInstagram /> },
-  ];
-
-  const defaultLinks = [
-    "GitHub",
-    "LinkedIn",
-    "Twitter",
-    "YouTube",
-    "Facebook",
-    "Instagram",
   ];
 
   return (
@@ -97,7 +91,19 @@ const Preview = () => {
       <div className="max-w-[348px] rounded-[24px] py-12 px-14 mx-auto md:my-32 md:shadow-lg flex items-start flex-col justify-center gap-[56px] z-20 bg-white">
         <div className="flex flex-col gap-[25px] w-full items-center justify-center">
           {/* PROFILE CIRCLE */}
-          <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full"></div>
+          <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full overflow-hidden flex items-center justify-center">
+            {profileImageUrl ? (
+              <Image
+                src={profileImageUrl}
+                width={96}
+                height={96}
+                alt="profile picture"
+                className="w-full h-full object-center object-cover"
+              />
+            ) : (
+              <div className="bg-[#EEEEEE] w-full h-full"></div>
+            )}
+          </div>
 
           <div className="w-full flex flex-col items-center justify-center gap-3">
             {/* USER NAME */}

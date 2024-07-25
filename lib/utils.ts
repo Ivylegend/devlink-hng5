@@ -46,3 +46,30 @@ export const authFormSchema = (type: string) =>
         path: ["confirmPassword"],
       }
     );
+
+export const formSchema = z.object({
+  links: z.array(
+    z.object({
+      platform: z.string().min(2, { message: "This field cannot be empty" }),
+      link: z.string().min(2, { message: "This field cannot be empty" }),
+    })
+  ),
+});
+
+export const platformColors: { [key: string]: string } = {
+  GitHub: "#181717",
+  LinkedIn: "#0A66C2",
+  Twitter: "#1DA1F2",
+  YouTube: "#FF0000",
+  Facebook: "#1877F2",
+  Instagram: "#E1306C",
+};
+
+export const defaultLinks = [
+  "GitHub",
+  "LinkedIn",
+  "Twitter",
+  "YouTube",
+  "Facebook",
+  "Instagram",
+];

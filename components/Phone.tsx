@@ -1,5 +1,9 @@
+"use client";
+
+import { defaultLinks, platformColors } from "@/lib/utils";
 import Image from "next/image";
-import React from "react";
+import { Client, Storage } from "node-appwrite";
+import React, { useEffect, useState } from "react";
 import {
   FaGithub,
   FaLinkedin,
@@ -9,21 +13,9 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 
-interface PhoneProps {
-  user: {
-    firstName: string | null;
-    lastName: string | null;
-    email: string | null;
-    github?: string | null;
-    linkedin?: string | null;
-    twitter?: string | null;
-    youtube?: string | null;
-    facebook?: string | null;
-    instagram?: string | null;
-  } | null;
-}
-
 const Phone: React.FC<PhoneProps> = ({ user }) => {
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+
   const displayName =
     user?.firstName && user?.lastName
       ? `${user.firstName} ${user.lastName}`
@@ -39,23 +31,35 @@ const Phone: React.FC<PhoneProps> = ({ user }) => {
     { platform: "Instagram", url: user?.instagram, icon: <FaInstagram /> },
   ];
 
-  const defaultLinks = [
-    "GitHub",
-    "LinkedIn",
-    "Twitter",
-    "YouTube",
-    "Facebook",
-    "Instagram",
-  ];
 
-  const platformColors: { [key: string]: string } = {
-    GitHub: "#181717",
-    LinkedIn: "#0A66C2",
-    Twitter: "#1DA1F2",
-    YouTube: "#EE3939",
-    Facebook: "#1877F2",
-    Instagram: "#E1306C",
-  };
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (user) {
+        const client = new Client()
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+        const storage = new Storage(client);
+
+        try {
+          const response = await storage.getFileDownload(
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!,
+            user.$id
+          );
+
+          // Convert the response (ArrayBuffer) to a Blob
+          const blob = new Blob([response], { type: "image/jpeg" });
+          const url = URL.createObjectURL(blob);
+          setProfileImageUrl(url);
+        } catch (error) {
+          console.error("Error downloading profile image", error);
+        }
+      }
+    };
+
+    fetchProfileImage();
+  }, [user]);
 
   return (
     <div className="border border-gray w-[307px] h-[640px] rounded-[56px] relative overflow-y-hidden">
@@ -70,8 +74,20 @@ const Phone: React.FC<PhoneProps> = ({ user }) => {
 
         <div className="w-[237px] mt-16 flex items-start flex-col justify-center gap-[56px] z-20">
           <div className="flex flex-col gap-[25px] w-full items-center justify-center">
-            {/* PROFILE CIRCLE*/}
-            <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full"></div>
+            {/* PROFILE CIRCLE */}
+            <div className="bg-[#EEEEEE] w-[96px] h-[96px] rounded-full overflow-hidden flex items-center justify-center">
+              {profileImageUrl ? (
+                <Image
+                  src={profileImageUrl}
+                  width={96}
+                  height={96}
+                  alt="profile picture"
+                  className="w-full h-full object-center object-cover"
+                />
+              ) : (
+                <div className="bg-[#EEEEEE] w-full h-full"></div>
+              )}
+            </div>
 
             <div className="w-full flex flex-col items-center justify-center gap-3">
               {/* USER NAME */}

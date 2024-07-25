@@ -11,6 +11,7 @@ import { getLoggedInUser, updateUserProfile } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
+import { Client, Storage } from "node-appwrite";
 
 export default function Profile() {
   const { toast } = useToast();
@@ -77,13 +78,91 @@ export default function Profile() {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const url = URL.createObjectURL(file);
       setImageUrl(url);
+
+      const client = new Client()
+        .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+        .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+      const storage = new Storage(client);
+
+      // Get the input element and ensure it's of type HTMLInputElement
+      const uploader = document.getElementById(
+        "uploader"
+      ) as HTMLInputElement | null;
+
+      if (uploader && uploader.files && uploader.files[0]) {
+        try {
+          if (user) {
+            const promise = storage.createFile(
+              process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!,
+              user.$id,
+              uploader.files[0]
+            );
+
+            const response = await promise;
+            console.log(response); // Success
+
+            // Optional: Toast notifications for success
+            toast({
+              description: "Your changes have been successfully saved!",
+              className: "bg-darkgray text-white h-[56px] rounded-[12px]",
+            });
+            // Force a page reload
+            window.location.reload();
+          } else {
+            console.error("User not found");
+            toast({
+              description: "User not found",
+              variant: "destructive",
+            });
+          }
+        } catch (error) {
+          console.error("Error uploading file", error);
+          toast({
+            description: "Error uploading file",
+            variant: "destructive",
+          });
+        }
+      } else {
+        console.error("Uploader element or file not found");
+      }
     }
   };
+
+  useEffect(() => {
+    const fetchProfileImage = async () => {
+      if (user) {
+        const client = new Client()
+          .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
+          .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+
+        const storage = new Storage(client);
+
+        try {
+          const response = await storage.getFileDownload(
+            process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID!,
+            user.$id
+          );
+
+          // Convert the response (ArrayBuffer) to a Blob
+          const blob = new Blob([response], { type: "image/jpeg" });
+          const url = URL.createObjectURL(blob);
+          setImageUrl(url);
+        } catch (error) {
+          console.error("Error downloading profile image", error);
+        }
+      }
+    };
+
+    fetchProfileImage();
+  }, [user]);
 
   return (
     <section className="bg-lightgray min-h-screen md:p-6 flex flex-col md:gap-6">
@@ -121,8 +200,8 @@ export default function Profile() {
                   >
                     <input
                       type="file"
-                      name="fileUpload"
-                      id="fileUpload"
+                      name="uploader"
+                      id="uploader"
                       className="absolute h-full w-full z-10 opacity-0 cursor-pointer"
                       onChange={handleFileChange}
                     />
